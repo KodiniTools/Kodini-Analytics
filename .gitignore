@@ -4,3 +4,10 @@ dist/
 .env
 .DS_Store
 backend/data/*.db
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Generated config files
+vite.config.js
+vite.config.d.ts
