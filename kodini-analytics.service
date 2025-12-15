@@ -1,0 +1,30 @@
+[Unit]
+Description=KodiniTools Analytics Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/kodini-analytics/backend
+ExecStart=/usr/bin/node dist/index.js
+Restart=on-failure
+RestartSec=10
+
+# Environment
+Environment=NODE_ENV=production
+Environment=PORT=3001
+EnvironmentFile=/var/www/kodini-analytics/backend/.env
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/kodini-analytics/backend/data
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kodini-analytics
+
+[Install]
+WantedBy=multi-user.target
