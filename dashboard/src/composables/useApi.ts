@@ -24,7 +24,7 @@ function getToken(): string {
 async function fetchApi<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   const token = getToken();
   const url = new URL(`${API_BASE}${endpoint}`, window.location.origin);
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value) url.searchParams.set(key, value);
   });
@@ -42,7 +42,18 @@ async function fetchApi<T>(endpoint: string, params: Record<string, string> = {}
     throw new Error(`API Error: ${response.status}`);
   }
 
-  return response.json();
+  // Prüfen ob Response-Body vorhanden ist und gültiges JSON enthält
+  const text = await response.text();
+
+  if (!text || text.trim() === '') {
+    throw new Error('Leere Antwort vom Server erhalten.');
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error('Ungültige JSON-Antwort vom Server.');
+  }
 }
 
 export function useApi() {
