@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 import { useAnalyticsStore } from '@/stores/analytics';
 import StatCard from '@/components/StatCard.vue';
 import PeriodSelector from '@/components/PeriodSelector.vue';
@@ -15,11 +15,17 @@ onMounted(() => {
 });
 
 // Auto-Refresh alle 60 Sekunden
-let refreshInterval: ReturnType<typeof setInterval>;
+let refreshInterval: ReturnType<typeof setInterval> | undefined;
 onMounted(() => {
   refreshInterval = setInterval(() => {
     store.fetchLive();
   }, 60000);
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+  }
 });
 
 watch(() => store.selectedPeriod, () => {
