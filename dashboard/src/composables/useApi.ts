@@ -8,7 +8,7 @@ import type {
   Period,
 } from '@/types';
 
-const API_BASE = '/api/stats';
+const API_BASE = '/analytics/api/stats';
 
 // Token aus localStorage oder URL-Parameter
 function getToken(): string {
