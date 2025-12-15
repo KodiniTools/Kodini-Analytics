@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import Database, { type Database as DatabaseType } from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -6,7 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = join(__dirname, '../../data/analytics.db');
 
 // Datenbank initialisieren
-const db = new Database(DB_PATH);
+const db: DatabaseType = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 
 // Schema erstellen
