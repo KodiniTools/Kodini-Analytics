@@ -47,13 +47,21 @@ async function fetchApi<T>(endpoint: string, params: Record<string, string> = {}
     throw new Error(`API Error: ${response.status}`);
   }
 
+  // 204 No Content - leere Antwort ist OK, Cache/Dedup Response
+  if (response.status === 204) {
+    console.log('[API] 204 No Content - returning null');
+    return null as T;
+  }
+
   const text = await response.text();
 
   console.log('[API] Response text length:', text.length);
   console.log('[API] Response text:', text.substring(0, 200));
 
   if (!text || text.trim() === '') {
-    throw new Error('Leere Antwort vom Server erhalten.');
+    // Bei leerem Body aber 200 Status, auch null zurückgeben
+    console.log('[API] Empty response body - returning null');
+    return null as T;
   }
 
   try {
