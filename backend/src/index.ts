@@ -49,11 +49,11 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Stats Routes (geschützt) - MUSS VOR /api kommen wegen spezifischerem Pfad
+app.use('/api/stats', statsRateLimiter, conditionalAuth, statsRoutes);
+
 // Tracking Routes (öffentlich, rate-limited)
 app.use('/api', trackingRateLimiter, trackRoutes);
-
-// Stats Routes (geschützt)
-app.use('/api/stats', statsRateLimiter, conditionalAuth, statsRoutes);
 
 // Static Dashboard (in Produktion)
 const dashboardPath = join(__dirname, '../public');
