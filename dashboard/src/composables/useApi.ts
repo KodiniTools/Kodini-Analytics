@@ -29,11 +29,16 @@ async function fetchApi<T>(endpoint: string, params: Record<string, string> = {}
     if (value) url.searchParams.set(key, value);
   });
 
+  console.log('[API] Fetching:', url.toString());
+  console.log('[API] Token:', token ? 'present' : 'missing');
+
   const response = await fetch(url.toString(), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  console.log('[API] Response status:', response.status);
 
   if (!response.ok) {
     if (response.status === 401) {
@@ -42,8 +47,10 @@ async function fetchApi<T>(endpoint: string, params: Record<string, string> = {}
     throw new Error(`API Error: ${response.status}`);
   }
 
-  // Prüfen ob Response-Body vorhanden ist und gültiges JSON enthält
   const text = await response.text();
+
+  console.log('[API] Response text length:', text.length);
+  console.log('[API] Response text:', text.substring(0, 200));
 
   if (!text || text.trim() === '') {
     throw new Error('Leere Antwort vom Server erhalten.');
