@@ -67,8 +67,8 @@ const statements = {
   // Stündliche Views inkrementieren
   incrementHourlyView: db.prepare(`
     INSERT INTO hourly_views (page_path, view_hour, view_count)
-    VALUES (?, datetime('now', 'start of hour'), 1)
-    ON CONFLICT(page_path, view_hour) 
+    VALUES (?, strftime('%Y-%m-%d %H:00:00', 'now'), 1)
+    ON CONFLICT(page_path, view_hour)
     DO UPDATE SET view_count = view_count + 1
   `),
 
